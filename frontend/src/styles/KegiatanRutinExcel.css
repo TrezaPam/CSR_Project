@@ -1,4 +1,42 @@
 /* ================================================
+   DESIGN TOKENS
+   ================================================ */
+:root {
+  --c-primary: #00b4d8;
+  --c-primary-200: #90e0ef;
+  --c-primary-300: #48cae4;
+  --c-primary-600: #0077b6;
+  --c-primary-800: #023e8a;
+  --c-text-900: #1e293b;
+  --c-text-700: #334155;
+  --c-text-600: #475569;
+  --c-text-500: #64748b;
+  --c-muted-border: #e2e8f0;
+  --c-muted-200: #cbd5e0;
+  --shadow-focus: rgba(0, 180, 216, 0.15);
+  --g-primary: linear-gradient(
+    135deg,
+    var(--c-primary) 0%,
+    var(--c-primary-600) 100%
+  );
+  --g-bg: linear-gradient(
+    135deg,
+    var(--c-primary) 0%,
+    var(--c-primary-600) 50%,
+    var(--c-primary-800) 100%
+  );
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* ================================================
    ANALYTICS CARDS
    ================================================ */
 
@@ -11,34 +49,38 @@
 
 .analytics-card {
   padding: 20px;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   color: white;
   display: flex;
   gap: 15px;
   align-items: flex-start;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--shadow-md);
   transition: all 0.3s;
 }
 
 .analytics-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-lg);
 }
 
 .analytics-card.primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--g-primary);
 }
 
 .analytics-card.success {
-  background: linear-gradient(135deg, #66bb6a 0%, #43a047 100%);
+  background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
 }
 
 .analytics-card.warning {
-  background: linear-gradient(135deg, #ffa726 0%, #fb8c00 100%);
+  background: linear-gradient(135deg, var(--warning) 0%, #d97706 100%);
 }
 
 .analytics-card.info {
-  background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+  background: linear-gradient(
+    135deg,
+    var(--c-primary) 0%,
+    var(--c-primary-600) 100%
+  );
 }
 
 .analytics-icon {
@@ -51,7 +93,7 @@
   align-items: center;
   justify-content: center;
   background: rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
 }
 
 .analytics-content {
@@ -100,9 +142,9 @@
    ================================================ */
 
 .bulk-actions {
-  background: linear-gradient(90deg, #e3f2fd 0%, #f3e5f5 100%);
-  border: 2px solid #667eea;
-  border-radius: 8px;
+  background: linear-gradient(90deg, #e0f7ff 0%, #e6f3ff 100%);
+  border: 2px solid var(--c-primary);
+  border-radius: var(--radius-md);
   padding: 15px 20px;
   margin-bottom: 20px;
   display: flex;
@@ -127,7 +169,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #667eea;
+  color: var(--c-primary-600);
   font-weight: 600;
   font-size: 14px;
 }
@@ -160,44 +202,68 @@
 }
 
 .btn-success {
-  background: #66bb6a;
+  background: var(--success);
   color: white;
 }
 
 .btn-success:hover {
-  background: #43a047;
+  background: #059669;
 }
 
 .btn-warning {
-  background: #ffa726;
+  background: var(--warning);
   color: white;
 }
 
 .btn-warning:hover {
-  background: #fb8c00;
+  background: #d97706;
 }
 
 * {
   box-sizing: border-box;
 }
 
+/* Styling overrides for Kegiatan Rutin pages - respect sidebar margins from App.css */
 .main-content {
-  padding: 20px;
+  padding: 1.25rem;
   background: #f5f5f5;
   min-height: 100vh;
+  /* Don't override margin-left to respect sidebar spacing */
 }
 
 /* ========== PAGE HEADER ========== */
 .page-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--g-primary);
   color: white;
   padding: 30px;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   margin-bottom: 25px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+/* Header logos */
+.header-logos {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.header-logo {
+  height: 36px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 6px rgba(255, 255, 255, 0.2));
+}
+
+.page-title {
+  flex: 1;
+  min-width: 0;
 }
 
 .page-title h1 {
@@ -278,8 +344,9 @@
   border-radius: 8px;
   margin-bottom: 20px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 15px;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px 16px;
+  align-items: end;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
@@ -300,12 +367,13 @@
 
 .filter-select,
 .filter-input {
-  padding: 9px 12px;
+  padding: 10px 12px;
   border: 1px solid #ddd;
   border-radius: 5px;
   font-size: 13px;
   font-family: inherit;
   transition: all 0.2s;
+  height: 42px;
 }
 
 .filter-select:focus,
@@ -319,12 +387,33 @@
   color: #333;
 }
 
+.search-group {
+  min-width: 220px;
+  max-width: 280px;
+  width: 100%;
+  justify-self: end;
+}
+
+.filter-actions {
+  justify-self: end;
+  align-self: end;
+}
+
+.filter-actions .btn-sm {
+  height: 42px;
+  min-width: 190px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+
 /* ========== EXCEL TABLE CONTAINER ========== */
 .excel-table-container {
   background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  padding: 15px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 20px;
   margin-top: 20px;
   overflow: hidden;
 }
@@ -332,149 +421,217 @@
 .excel-table-wrapper {
   overflow-x: auto;
   max-width: 100%;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
+  scroll-behavior: smooth;
 }
+
+/* ================================================
+   MODERN CARD-BASED LAYOUT (HORIZONTAL SCROLL)
+   ================================================ */
 
 .excel-table {
   width: 100%;
-  border-collapse: collapse;
-  font-size: 12px;
-  min-width: 2000px;
-  background: #fff;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 13px;
+  background: transparent;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 16px;
+  padding: 0;
 }
 
-/* ========== TABLE HEADER ========== */
 .excel-table thead {
-  position: sticky;
-  top: 0;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  z-index: 15;
+  display: none;
 }
 
-.excel-table th {
-  padding: 12px 8px;
-  text-align: left;
-  font-weight: 700;
-  border: 1px solid #5a6bb3;
-  white-space: nowrap;
-  font-size: 11px;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
+.excel-table tbody {
+  display: contents;
 }
 
-.excel-table th:first-child {
-  border-left: none;
-}
-
-.excel-table th:last-child {
-  border-right: none;
-}
-
-/* ========== TABLE BODY ========== */
 .excel-table tbody tr {
-  border-bottom: 1px solid #e8e8e8;
-  transition: background 0.15s;
+  display: grid;
+  grid-template-columns: 1fr;
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--c-muted-border);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 0;
 }
 
 .excel-table tbody tr:hover {
-  background: #f9f9ff;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+  border-color: var(--c-primary);
 }
 
-.excel-table tbody tr:nth-child(odd) {
-  background: #fafbff;
-}
-
-.excel-table tbody tr:nth-child(even) {
-  background: #ffffff;
-}
-
-.excel-table tbody tr:nth-child(even):hover {
-  background: #f0f2ff;
-}
-
-.excel-table td {
-  padding: 10px 8px;
-  border-right: 1px solid #e8e8e8;
-  vertical-align: middle;
-  text-align: left;
-  color: #333;
-}
-
-.excel-table td:first-child {
-  border-left: none;
-}
-
-.excel-table td:last-child {
+/* Card Header with Institution Info */
+.excel-table tbody tr td:nth-child(1),
+.excel-table tbody tr td:nth-child(2),
+.excel-table tbody tr td:nth-child(3),
+.excel-table tbody tr td:nth-child(4) {
+  display: block;
+  padding: 0;
+  border: none;
+  background: transparent;
   border-right: none;
 }
 
-/* ========== COLUMN WIDTH & STYLE ========== */
-.col-no {
-  width: 45px;
-  text-align: center;
-  font-weight: 600;
-  color: #667eea;
-  background: #f9f9ff;
+.excel-table tbody tr td:nth-child(1) {
+  display: none;
 }
 
-.col-institution {
-  min-width: 220px;
-  font-weight: 600;
-  color: #222;
-  max-width: 220px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.col-agency {
-  min-width: 170px;
-  max-width: 170px;
-  font-size: 11px;
-  color: #666;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.col-branch {
-  min-width: 100px;
-  text-align: center;
-  font-size: 12px;
-  color: #555;
-  font-weight: 500;
-}
-
-.col-qty {
-  width: 70px;
-  text-align: center;
+.excel-table tbody tr td:nth-child(2) {
+  background: var(--g-primary);
+  color: white;
+  padding: 16px;
   font-weight: 700;
-  color: #2196f3;
-  background: #e3f2fd;
-  font-size: 13px;
+  font-size: 15px;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.col-month {
-  width: 110px;
-  min-width: 110px;
-  text-align: center;
-  font-weight: 500;
-  background: #f0f0f8;
-  transition: all 0.2s;
-  cursor: pointer;
+.excel-table tbody tr td:nth-child(3),
+.excel-table tbody tr td:nth-child(4) {
+  padding: 8px 16px;
+  font-size: 12px;
+  color: var(--c-text-600);
+  border-bottom: 1px solid var(--c-muted-border);
+}
+
+.excel-table tbody tr td:nth-child(3)::before {
+  content: "Instansi Penerima: ";
+  font-weight: 700;
+  color: var(--c-text-700);
+  display: block;
+  margin-bottom: 4px;
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.3px;
 }
 
-.col-month:hover {
-  background: #e3f2fd;
-  color: #1976d2;
+.excel-table tbody tr td:nth-child(4)::before {
+  content: "Cabang: ";
+  font-weight: 700;
+  color: var(--c-text-700);
+  display: block;
+  margin-bottom: 4px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* Quantity Section */
+.excel-table tbody tr td:nth-child(5) {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 16px;
+  border-bottom: 1px solid var(--c-muted-border);
+  grid-column: 1 / -1;
+}
+
+.col-qty {
+  text-align: center;
+  width: auto;
+  background: rgba(0, 180, 216, 0.08);
+  padding: 12px;
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--c-primary);
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--c-primary);
+  transition: all 0.2s;
+}
+
+.col-qty:hover {
+  background: rgba(0, 180, 216, 0.15);
+  transform: scale(1.02);
+}
+
+.col-qty::before {
+  content: "Default Qty";
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--c-text-600);
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+  margin-bottom: 6px;
+}
+
+/* Month Schedule Grid */
+.excel-table tbody tr td:nth-child(n + 6):nth-child(-n + 17) {
+  display: none;
+}
+
+/* Create visible months grid */
+.col-month {
+  display: block;
+  padding: 0;
+  border: none;
+  width: auto;
+  background: transparent;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+/* Months Section */
+.excel-table tbody tr {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+}
+
+.excel-table tbody tr::before {
+  content: "";
+  order: 0;
+  flex-basis: 100%;
+  height: auto;
+}
+
+/* Action Buttons */
+.excel-table tbody tr td:nth-child(18) {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  border-top: 1px solid var(--c-muted-border);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  background: #f8fdff;
 }
 
 .col-actions {
-  width: 95px;
+  width: auto;
   text-align: center;
-  background: #f9f9ff;
+  background: transparent;
+}
+
+/* ========== QUANTITY VALUE CELL ========== */
+.qty-value {
+  font-weight: 800;
+  color: var(--c-primary-600);
+  font-size: 14px;
+  display: inline-block;
+  padding: 4px 8px;
+  background: rgba(0, 180, 216, 0.08);
+  border-radius: 4px;
+  border-left: 3px solid var(--c-primary);
+  transition: all 0.2s;
+}
+
+.qty-value:hover {
+  background: rgba(0, 180, 216, 0.15);
+  transform: scale(1.05);
 }
 
 /* ========== SCHEDULE CELL ========== */
@@ -492,7 +649,7 @@
 .schedule-date {
   font-size: 11px;
   font-weight: 700;
-  color: #222;
+  color: var(--c-text-900);
   line-height: 1.3;
 }
 
@@ -516,9 +673,9 @@
 
 .schedule-cell-empty:hover {
   opacity: 1;
-  color: #667eea;
+  color: var(--c-primary);
   transform: scale(1.15);
-  text-shadow: 0 0 8px rgba(102, 126, 234, 0.3);
+  text-shadow: 0 0 8px rgba(0, 180, 216, 0.3);
 }
 
 /* ========== STATUS BADGES ========== */
@@ -535,27 +692,27 @@
 }
 
 .status-scheduled {
-  background: #e3f2fd;
-  color: #1565c0;
-  border-color: #90caf9;
+  background: #e0f7ff;
+  color: var(--c-primary-600);
+  border-color: var(--c-primary-300);
 }
 
 .status-completed {
-  background: #e8f5e9;
-  color: #2e7d32;
-  border-color: #81c784;
+  background: #e6f9f2;
+  color: #065f46;
+  border-color: #86efac;
 }
 
 .status-pending {
-  background: #fff3e0;
-  color: #e65100;
-  border-color: #ffb74d;
+  background: #fef3c7;
+  color: #b45309;
+  border-color: #fcd34d;
 }
 
 .status-cancelled {
-  background: #ffebee;
-  color: #b71c1c;
-  border-color: #ef5350;
+  background: #fee2e2;
+  color: #991b1b;
+  border-color: #fca5a5;
 }
 
 /* ========== ACTION BUTTONS ========== */
@@ -578,21 +735,21 @@
 }
 
 .btn-edit {
-  color: #1976d2;
+  color: var(--c-primary);
 }
 
 .btn-edit:hover {
-  background: #e3f2fd;
-  color: #1565c0;
+  background: #e0f7ff;
+  color: var(--c-primary-600);
 }
 
 .btn-delete {
-  color: #d32f2f;
+  color: var(--danger);
 }
 
 .btn-delete:hover {
-  background: #ffebee;
-  color: #b71c1c;
+  background: #fee2e2;
+  color: #991b1b;
 }
 
 /* ========== MODAL ========== */
@@ -798,6 +955,280 @@
   }
 }
 
+/* ================================================
+   MODERN CARD-BASED LAYOUT STYLES
+   ================================================ */
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 20px;
+  padding: 10px;
+}
+
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--c-text-500);
+}
+
+.empty-state i {
+  font-size: 48px;
+  color: var(--c-muted-200);
+  margin-bottom: 16px;
+  display: block;
+}
+
+.empty-state p {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Stakeholder Card */
+.stakeholder-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  border: 1px solid var(--c-muted-border);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.stakeholder-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+  border-color: var(--c-primary);
+}
+
+/* Card Header */
+.card-header {
+  background: var(--g-primary);
+  color: white;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-left {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  flex: 1;
+  min-width: 0;
+}
+
+.card-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.header-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.header-text h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.3;
+}
+
+.header-text .agency {
+  margin: 4px 0 0 0;
+  font-size: 12px;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+.card-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* Card Info Section */
+.card-info {
+  display: flex;
+  gap: 12px;
+  padding: 12px 16px;
+  background: #f8fdff;
+  border-bottom: 1px solid var(--c-muted-border);
+}
+
+.info-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.info-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: var(--c-text-600);
+}
+
+.info-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c-text-900);
+  word-break: break-word;
+}
+
+.qty-badge {
+  background: rgba(0, 180, 216, 0.1);
+  color: var(--c-primary-600);
+  padding: 4px 8px;
+  border-radius: 6px;
+  border-left: 2px solid var(--c-primary);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+/* Monthly Schedule Section */
+.card-months {
+  padding: 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.months-title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: var(--c-text-700);
+}
+
+.months-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.month-cell {
+  background: #f8fdff;
+  border: 1px solid var(--c-muted-border);
+  border-radius: var(--radius-md);
+  padding: 10px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 90px;
+  justify-content: space-between;
+}
+
+.month-cell:hover {
+  border-color: var(--c-primary);
+  background: rgba(0, 180, 216, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 180, 216, 0.1);
+}
+
+.month-cell.has-schedule {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 180, 216, 0.08),
+    rgba(16, 185, 129, 0.05)
+  );
+  border-color: var(--c-primary);
+}
+
+.month-name {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+  color: var(--c-text-700);
+}
+
+.schedule-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+}
+
+.btn-proof {
+  border: 1px solid var(--c-primary-300);
+  background: rgba(0, 180, 216, 0.08);
+  color: var(--c-primary-600);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-proof:hover {
+  background: rgba(0, 180, 216, 0.15);
+  border-color: var(--c-primary);
+  color: var(--c-primary-800);
+}
+
+.schedule-date {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--c-primary-600);
+}
+
+.schedule-qty {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--c-primary);
+  display: block;
+}
+
+.add-schedule {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--c-text-500);
+  transition: all 0.2s;
+}
+
+.month-cell:hover .add-schedule {
+  color: var(--c-primary);
+}
+
+.add-schedule i {
+  font-size: 16px;
+}
+
+.add-schedule span {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+}
+
 @media (max-width: 768px) {
   .main-content {
     padding: 12px;
@@ -813,6 +1244,23 @@
 
   .filter-section {
     grid-template-columns: 1fr;
+  }
+
+  .cards-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .card-header {
+    padding: 12px;
+  }
+
+  .header-text h3 {
+    font-size: 14px;
+  }
+
+  .months-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
 
   .excel-table {
@@ -852,6 +1300,22 @@
   }
 }
 
+@media (max-width: 480px) {
+  .months-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .card-actions {
+    align-self: flex-end;
+  }
+}
+
 /* ========== PRINT STYLES ========== */
 @media print {
   .page-header,
@@ -885,14 +1349,14 @@
 }
 
 .excel-table-wrapper::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #f8fafc;
 }
 
 .excel-table-wrapper::-webkit-scrollbar-thumb {
-  background: #888;
+  background: var(--c-primary-300);
   border-radius: 4px;
 }
 
 .excel-table-wrapper::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: var(--c-primary);
 }

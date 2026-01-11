@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useMemo } from "react";
 import "../styles/DashboardPage.css";
+import DanoneLogo from "../assets/DANONE_LOGO_VERTICAL.png";
+import AquaLogo from "../assets/Logo_Aqua_Vector_PNG__HD-removebg-preview.png";
 
 function DashboardPages() {
   const [proposals, setProposals] = useState([]);
@@ -26,11 +28,11 @@ function DashboardPages() {
   const [showBulkActions, setShowBulkActions] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [detailProposal, setDetailProposal] = useState(null);
-  
+
   // New state for date range filter
   const [dateRange, setDateRange] = useState({
     startDate: "",
-    endDate: ""
+    endDate: "",
   });
 
   const [formData, setFormData] = useState({
@@ -465,8 +467,8 @@ function DashboardPages() {
 
   // Print PDF function
   const handlePrintPDF = () => {
-    const winPrint = window.open('', '', 'width=900,height=650');
-    
+    const winPrint = window.open("", "", "width=900,height=650");
+
     winPrint.document.write(`
       <html>
         <head>
@@ -580,12 +582,12 @@ function DashboardPages() {
         <body>
           <div class="header">
             <h1>Laporan Proposal CSR</h1>
-            <p>Dicetak pada: ${new Date().toLocaleDateString('id-ID', { 
-              day: 'numeric', 
-              month: 'long', 
-              year: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit'
+            <p>Dicetak pada: ${new Date().toLocaleDateString("id-ID", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
             })}</p>
           </div>
           
@@ -608,7 +610,9 @@ function DashboardPages() {
             </div>
             <div class="summary-item">
               <h3>Total Budget</h3>
-              <p style="font-size: 14px;">${formatCurrency(summaryData.totalBudget)}</p>
+              <p style="font-size: 14px;">${formatCurrency(
+                summaryData.totalBudget
+              )}</p>
             </div>
           </div>
           
@@ -626,22 +630,42 @@ function DashboardPages() {
               </tr>
             </thead>
             <tbody>
-              ${filteredProposals.map((p, idx) => `
+              ${filteredProposals
+                .map(
+                  (p, idx) => `
                 <tr>
                   <td style="text-align: center;">${idx + 1}</td>
                   <td><span class="case-id">${p.case_id}</span></td>
-                  <td><strong>${p.nama_proposal}</strong><br><small style="color: #64748b;">${p.tipe_proposal}</small></td>
+                  <td><strong>${
+                    p.nama_proposal
+                  }</strong><br><small style="color: #64748b;">${
+                    p.tipe_proposal
+                  }</small></td>
                   <td>${p.asal_proposal}</td>
                   <td>
-                    <span class="status-badge status-${p.status_pengambilan === 'In Progress' ? 'progress' : p.status_pengambilan === 'Siap Diambil' ? 'ready' : 'done'}">
+                    <span class="status-badge status-${
+                      p.status_pengambilan === "In Progress"
+                        ? "progress"
+                        : p.status_pengambilan === "Siap Diambil"
+                        ? "ready"
+                        : "done"
+                    }">
                       ${p.status_pengambilan}
                     </span>
                   </td>
-                  <td>${p.PIC?.nama_pic || '-'}</td>
-                  <td>${new Date(p.tanggal_masuk).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
-                  <td style="text-align: right; font-weight: 600;">${formatCurrency(p.total_harga)}</td>
+                  <td>${p.PIC?.nama_pic || "-"}</td>
+                  <td>${new Date(p.tanggal_masuk).toLocaleDateString("id-ID", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                  })}</td>
+                  <td style="text-align: right; font-weight: 600;">${formatCurrency(
+                    p.total_harga
+                  )}</td>
                 </tr>
-              `).join('')}
+              `
+                )
+                .join("")}
             </tbody>
           </table>
           
@@ -651,7 +675,7 @@ function DashboardPages() {
         </body>
       </html>
     `);
-    
+
     winPrint.document.close();
     winPrint.focus();
     setTimeout(() => {
@@ -731,17 +755,22 @@ function DashboardPages() {
 
       <header className="dashboard-header">
         <div className="header-left">
-          <h1>Dashboard - Sistem Monitoring CSR</h1>
-          <p className="header-subtitle">
-            Kelola dan pantau semua proposal CSR perusahaan
-          </p>
-        </div>
-        <div className="user-info">
-          <div className="user-details">
-            <h4>Welcome, Admin</h4>
-            <p>Administrator</p>
+          <div className="header-logos">
+            <img src={DanoneLogo} alt="Danone" className="header-logo" />
+            <img src={AquaLogo} alt="Aqua" className="header-logo" />
           </div>
-          <div className="user-avatar">A</div>
+        </div>
+        <div className="header-center">
+          <h1>Dashboard - Sistem Monitoring CSR</h1>
+        </div>
+        <div className="header-right">
+          <div className="user-info">
+            <div className="user-details">
+              <h4>Welcome, Admin</h4>
+              <p>Administrator</p>
+            </div>
+            <div className="user-avatar">A</div>
+          </div>
         </div>
       </header>
 
@@ -816,6 +845,113 @@ function DashboardPages() {
             </p>
           </div>
         </div>
+
+        <div className="summary-card chart-card">
+          <h3>DISTRIBUSI STATUS PROPOSAL</h3>
+          <div className="pie-chart-container">
+            <div
+              className="pie-chart"
+              style={{
+                background: `conic-gradient(
+                #f59e0b 0deg ${
+                  (summaryData.inProgressCount / summaryData.totalProposals) *
+                    360 || 0
+                }deg,
+                #3b82f6 ${
+                  (summaryData.inProgressCount / summaryData.totalProposals) *
+                    360 || 0
+                }deg ${
+                  ((summaryData.inProgressCount + summaryData.readyCount) /
+                    summaryData.totalProposals) *
+                    360 || 0
+                }deg,
+                #10b981 ${
+                  ((summaryData.inProgressCount + summaryData.readyCount) /
+                    summaryData.totalProposals) *
+                    360 || 0
+                }deg 360deg
+              )`,
+              }}
+            ></div>
+            <div className="pie-legend">
+              <div className="legend-item">
+                <div
+                  className="legend-color"
+                  style={{ background: "#f59e0b" }}
+                ></div>
+                <div className="legend-text">
+                  <span>In Progress</span>
+                  <div>
+                    <span className="legend-value">
+                      {summaryData.inProgressCount}
+                    </span>
+                    <span className="legend-percent">
+                      (
+                      {summaryData.totalProposals > 0
+                        ? (
+                            (summaryData.inProgressCount /
+                              summaryData.totalProposals) *
+                            100
+                          ).toFixed(1)
+                        : 0}
+                      %)
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className="legend-item">
+                <div
+                  className="legend-color"
+                  style={{ background: "#3b82f6" }}
+                ></div>
+                <div className="legend-text">
+                  <span>Siap Diambil</span>
+                  <div>
+                    <span className="legend-value">
+                      {summaryData.readyCount}
+                    </span>
+                    <span className="legend-percent">
+                      (
+                      {summaryData.totalProposals > 0
+                        ? (
+                            (summaryData.readyCount /
+                              summaryData.totalProposals) *
+                            100
+                          ).toFixed(1)
+                        : 0}
+                      %)
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className="legend-item">
+                <div
+                  className="legend-color"
+                  style={{ background: "#10b981" }}
+                ></div>
+                <div className="legend-text">
+                  <span>Done</span>
+                  <div>
+                    <span className="legend-value">
+                      {summaryData.doneCount}
+                    </span>
+                    <span className="legend-percent">
+                      (
+                      {summaryData.totalProposals > 0
+                        ? (
+                            (summaryData.doneCount /
+                              summaryData.totalProposals) *
+                            100
+                          ).toFixed(1)
+                        : 0}
+                      %)
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="controls-section">
@@ -872,7 +1008,10 @@ function DashboardPages() {
             Export CSV
           </button>
 
-          <button className="export-button print-button" onClick={handlePrintPDF}>
+          <button
+            className="export-button print-button"
+            onClick={handlePrintPDF}
+          >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
               <path d="M18,3H6V7H18M19,12A1,1 0 0,1 18,11A1,1 0 0,1 19,10A1,1 0 0,1 20,11A1,1 0 0,1 19,12M16,19H8V14H16M19,8H5A3,3 0 0,0 2,11V17H6V21H18V17H22V11A3,3 0 0,0 19,8Z" />
             </svg>
@@ -923,7 +1062,9 @@ function DashboardPages() {
               className="date-filter"
               placeholder="Dari Tanggal"
               value={dateRange.startDate}
-              onChange={(e) => setDateRange(prev => ({ ...prev, startDate: e.target.value }))}
+              onChange={(e) =>
+                setDateRange((prev) => ({ ...prev, startDate: e.target.value }))
+              }
               title="Dari Tanggal"
             />
             <span className="date-separator">-</span>
@@ -932,12 +1073,23 @@ function DashboardPages() {
               className="date-filter"
               placeholder="Sampai Tanggal"
               value={dateRange.endDate}
-              onChange={(e) => setDateRange(prev => ({ ...prev, endDate: e.target.value }))}
+              onChange={(e) =>
+                setDateRange((prev) => ({ ...prev, endDate: e.target.value }))
+              }
               title="Sampai Tanggal"
             />
             {(dateRange.startDate || dateRange.endDate) && (
-              <button className="clear-date-btn" onClick={clearDateFilter} title="Hapus Filter Tanggal">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <button
+                className="clear-date-btn"
+                onClick={clearDateFilter}
+                title="Hapus Filter Tanggal"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
                   <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
                 </svg>
               </button>
@@ -975,7 +1127,7 @@ function DashboardPages() {
         </div>
       </div>
 
-      <div id="printable-table" style={{ display: 'none' }}>
+      <div id="printable-table" style={{ display: "none" }}>
         {/* This div is used for printing */}
       </div>
 
@@ -994,8 +1146,14 @@ function DashboardPages() {
                   {searchTerm && `"${searchTerm}"`}
                   {(dateRange.startDate || dateRange.endDate) && (
                     <span className="date-info">
-                      {dateRange.startDate && ` dari ${new Date(dateRange.startDate).toLocaleDateString('id-ID')}`}
-                      {dateRange.endDate && ` sampai ${new Date(dateRange.endDate).toLocaleDateString('id-ID')}`}
+                      {dateRange.startDate &&
+                        ` dari ${new Date(
+                          dateRange.startDate
+                        ).toLocaleDateString("id-ID")}`}
+                      {dateRange.endDate &&
+                        ` sampai ${new Date(
+                          dateRange.endDate
+                        ).toLocaleDateString("id-ID")}`}
                     </span>
                   )}
                 </span>
@@ -1261,7 +1419,9 @@ function DashboardPages() {
                           <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
                         </svg>
                         <h3>Tidak ada proposal yang ditemukan</h3>
-                        {(searchTerm || dateRange.startDate || dateRange.endDate) && (
+                        {(searchTerm ||
+                          dateRange.startDate ||
+                          dateRange.endDate) && (
                           <p className="no-data-hint">
                             Coba ubah kata kunci pencarian atau filter
                           </p>

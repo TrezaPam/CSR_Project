@@ -6,6 +6,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import "../styles/KegiatanRutinExcel.css";
+import * as routineService from "../api/routineService";
 
 const KegiatanRutinNew = () => {
   // ===============================================
@@ -34,20 +35,15 @@ const KegiatanRutinNew = () => {
     contact_person: "",
     phone: "",
     address: "",
-    is_active: true,
   });
 
   const [scheduleForm, setScheduleForm] = useState({
     stakeholder_id: "",
     pickup_date: "",
-    quantity: 0,
     status: "scheduled",
-    pic: "",
     notes: "",
     proof_file: null,
   });
-
-  const API_BASE_URL = "http://localhost:5000/api/routines";
 
   // ===============================================
   // API CALLS
@@ -56,13 +52,8 @@ const KegiatanRutinNew = () => {
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await fetch(
-        `${API_BASE_URL}/schedules/by-stakeholder?year=${selectedYear}`
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setStakeholdersData(data);
-      }
+      const data = await routineService.getRoutinesByStakeholder(selectedYear);
+      setStakeholdersData(data);
     } catch (error) {
       console.error("Error fetching data:", error);
       alert("Gagal memuat data");
@@ -89,7 +80,6 @@ const KegiatanRutinNew = () => {
       contact_person: "",
       phone: "",
       address: "",
-      is_active: true,
     });
     setShowStakeholderModal(true);
   };
@@ -104,7 +94,6 @@ const KegiatanRutinNew = () => {
       contact_person: stakeholder.contact_person || "",
       phone: stakeholder.phone || "",
       address: stakeholder.address || "",
-      is_active: stakeholder.is_active,
     });
     setShowStakeholderModal(true);
   };
@@ -113,35 +102,18 @@ const KegiatanRutinNew = () => {
     e.preventDefault();
 
     try {
-      let response;
       if (editingStakeholder) {
-        response = await fetch(
-          `${API_BASE_URL}/stakeholders/${editingStakeholder.id}`,
-          {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(stakeholderForm),
-          }
+        await routineService.updateStakeholder(
+          editingStakeholder.id,
+          stakeholderForm
         );
+        alert("Stakeholder berhasil diperbarui");
       } else {
-        response = await fetch(`${API_BASE_URL}/stakeholders`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(stakeholderForm),
-        });
+        await routineService.createStakeholder(stakeholderForm);
+        alert("Stakeholder berhasil ditambahkan");
       }
-
-      if (response.ok) {
-        alert(
-          `Stakeholder berhasil ${
-            editingStakeholder ? "diperbarui" : "ditambahkan"
-          }`
-        );
-        fetchData();
-        setShowStakeholderModal(false);
-      } else {
-        alert("Gagal menyimpan data");
-      }
+      fetchData();
+      setShowStakeholderModal(false);
     } catch (error) {
       console.error("Error:", error);
       alert("Terjadi kesalahan");
@@ -155,18 +127,12 @@ const KegiatanRutinNew = () => {
       return;
 
     try {
-      const response = await fetch(`${API_BASE_URL}/stakeholders/${id}`, {
-        method: "DELETE",
-      });
-
-      if (response.ok) {
-        alert("Stakeholder berhasil dihapus");
-        fetchData();
-      } else {
-        alert("Gagal menghapus stakeholder");
-      }
+      await routineService.deleteStakeholder(id);
+      alert("Stakeholder berhasil dihapus");
+      fetchData();
     } catch (error) {
       console.error("Error:", error);
+      alert("Gagal menghapus stakeholder");
     }
   };
 
@@ -179,9 +145,7 @@ const KegiatanRutinNew = () => {
     setScheduleForm({
       stakeholder_id: stakeholderId,
       pickup_date: "",
-      quantity: 0,
       status: "scheduled",
-      pic: "",
       notes: "",
       proof_file: null,
     });
@@ -193,9 +157,7 @@ const KegiatanRutinNew = () => {
     setScheduleForm({
       stakeholder_id: schedule.stakeholder_id,
       pickup_date: schedule.pickup_date,
-      quantity: schedule.quantity,
       status: schedule.status,
-      pic: schedule.pic || "",
       notes: schedule.notes || "",
       proof_file: null,
     });
@@ -208,9 +170,7 @@ const KegiatanRutinNew = () => {
     const formData = new FormData();
     formData.append("stakeholder_id", scheduleForm.stakeholder_id);
     formData.append("pickup_date", scheduleForm.pickup_date);
-    formData.append("quantity", scheduleForm.quantity);
     formData.append("status", scheduleForm.status);
-    formData.append("pic", scheduleForm.pic);
     formData.append("notes", scheduleForm.notes);
 
     if (scheduleForm.proof_file) {
@@ -218,31 +178,15 @@ const KegiatanRutinNew = () => {
     }
 
     try {
-      let response;
       if (editingSchedule) {
-        response = await fetch(
-          `${API_BASE_URL}/schedules/${editingSchedule.id}`,
-          {
-            method: "PUT",
-            body: formData,
-          }
-        );
+        await routineService.updateRoutine(editingSchedule.id, formData);
+        alert("Jadwal berhasil diperbarui");
       } else {
-        response = await fetch(`${API_BASE_URL}/schedules`, {
-          method: "POST",
-          body: formData,
-        });
+        await routineService.createRoutine(formData);
+        alert("Jadwal berhasil ditambahkan");
       }
-
-      if (response.ok) {
-        alert(
-          `Jadwal berhasil ${editingSchedule ? "diperbarui" : "ditambahkan"}`
-        );
-        fetchData();
-        setShowScheduleModal(false);
-      } else {
-        alert("Gagal menyimpan jadwal");
-      }
+      fetchData();
+      setShowScheduleModal(false);
     } catch (error) {
       console.error("Error:", error);
       alert("Terjadi kesalahan");
@@ -253,18 +197,12 @@ const KegiatanRutinNew = () => {
     if (!window.confirm("Hapus jadwal ini?")) return;
 
     try {
-      const response = await fetch(`${API_BASE_URL}/schedules/${id}`, {
-        method: "DELETE",
-      });
-
-      if (response.ok) {
-        alert("Jadwal berhasil dihapus");
-        fetchData();
-      } else {
-        alert("Gagal menghapus jadwal");
-      }
+      await routineService.deleteRoutine(id);
+      alert("Jadwal berhasil dihapus");
+      fetchData();
     } catch (error) {
       console.error("Error:", error);
+      alert("Gagal menghapus jadwal");
     }
   };
 
@@ -276,19 +214,12 @@ const KegiatanRutinNew = () => {
     }
 
     try {
-      const response = await fetch(`${API_BASE_URL}/schedules/generate`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ month, year: selectedYear }),
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        alert(result.message);
-        fetchData();
-      } else {
-        alert("Gagal generate jadwal");
-      }
+      const result = await routineService.generateMonthlySchedules(
+        month,
+        selectedYear
+      );
+      alert(result.message);
+      fetchData();
     } catch (error) {
       console.error("Error:", error);
       alert("Terjadi kesalahan");
@@ -346,9 +277,11 @@ const KegiatanRutinNew = () => {
       }
       if (sh.branch) branchCounts[sh.branch]++;
 
+      // Tambahkan qty default ke total item
+      totalQuantity += sh.default_quantity || 0;
+
       (sh.schedules || []).forEach((s) => {
         totalSchedules++;
-        totalQuantity += s.quantity || 0;
 
         if (s.status === "completed") completed++;
         else if (s.status === "scheduled") scheduled++;
@@ -521,11 +454,7 @@ const KegiatanRutinNew = () => {
     let updated = 0;
     for (const id of selectedSchedules) {
       try {
-        await fetch(`${API_BASE_URL}/schedules/${id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ status }),
-        });
+        await routineService.updateRoutine(id, { status });
         updated++;
       } catch (error) {
         console.error("Error updating:", error);
@@ -716,18 +645,6 @@ const KegiatanRutinNew = () => {
         </div>
         <div className="filter-group">
           <label>
-            <i className="fas fa-search"></i> Cari
-          </label>
-          <input
-            type="text"
-            className="filter-input"
-            placeholder="Nama institusi..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-        <div className="filter-group">
-          <label>
             <i className="fas fa-filter"></i> Status
           </label>
           <select
@@ -755,7 +672,19 @@ const KegiatanRutinNew = () => {
             <option value="schedules">Jumlah Jadwal</option>
           </select>
         </div>
-        <div className="filter-group">
+        <div className="filter-group search-group">
+          <label>
+            <i className="fas fa-search"></i> Cari
+          </label>
+          <input
+            type="text"
+            className="filter-input"
+            placeholder="Nama institusi..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+        <div className="filter-group filter-actions">
           <label>
             <i className="fas fa-eye"></i> &nbsp;
           </label>
@@ -801,60 +730,83 @@ const KegiatanRutinNew = () => {
         </div>
       )}
 
-      {/* Excel-like Table View */}
+      {/* Modern Card-Based View */}
       <div className="excel-table-container">
-        <div className="excel-table-wrapper">
-          <table className="excel-table">
-            <thead>
-              <tr>
-                <th className="col-no">No</th>
-                <th className="col-institution">Nama Institusi</th>
-                <th className="col-agency">Instansi Penerima</th>
-                <th className="col-branch">Cabang</th>
-                <th className="col-qty">Jumlah</th>
-                {[...Array(12)].map((_, i) => (
-                  <th key={i} className="col-month">
-                    {new Date(0, i).toLocaleString("id-ID", {
-                      month: "short",
-                    })}
-                  </th>
-                ))}
-                <th className="col-actions">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredData.length === 0 ? (
-                <tr>
-                  <td
-                    colSpan="18"
-                    style={{ textAlign: "center", padding: "20px" }}
-                  >
-                    Tidak ada data stakeholder
-                  </td>
-                </tr>
-              ) : (
-                filteredData.map((stakeholder, index) => (
-                  <tr key={stakeholder.id}>
-                    <td className="col-no">{index + 1}</td>
-                    <td className="col-institution">
-                      {stakeholder.institution_name}
-                    </td>
-                    <td className="col-agency">
-                      {stakeholder.receiving_agency || "-"}
-                    </td>
-                    <td className="col-branch">{stakeholder.branch || "-"}</td>
-                    <td className="col-qty">{stakeholder.default_quantity}</td>
+        <div className="cards-grid">
+          {filteredData.length === 0 ? (
+            <div className="empty-state">
+              <i className="fas fa-inbox"></i>
+              <p>Tidak ada data stakeholder</p>
+            </div>
+          ) : (
+            filteredData.map((stakeholder, index) => (
+              <div key={stakeholder.id} className="stakeholder-card">
+                {/* Card Header */}
+                <div className="card-header">
+                  <div className="header-left">
+                    <span className="card-number">{index + 1}</span>
+                    <div className="header-text">
+                      <h3>{stakeholder.institution_name}</h3>
+                      {stakeholder.receiving_agency && (
+                        <p className="agency">{stakeholder.receiving_agency}</p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="card-actions">
+                    <button
+                      className="btn-icon btn-edit"
+                      onClick={() => openEditStakeholderModal(stakeholder)}
+                      title="Edit Stakeholder"
+                    >
+                      <i className="fas fa-edit"></i>
+                    </button>
+                    <button
+                      className="btn-icon btn-delete"
+                      onClick={() => handleDeleteStakeholder(stakeholder.id)}
+                      title="Hapus Stakeholder"
+                    >
+                      <i className="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Card Info */}
+                <div className="card-info">
+                  {stakeholder.branch && (
+                    <div className="info-item">
+                      <span className="info-label">Cabang</span>
+                      <span className="info-value">{stakeholder.branch}</span>
+                    </div>
+                  )}
+                  <div className="info-item">
+                    <span className="info-label">Qty Default</span>
+                    <span className="info-value qty-badge">
+                      {stakeholder.default_quantity}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Monthly Schedule Grid */}
+                <div className="card-months">
+                  <p className="months-title">Jadwal Kegiatan {selectedYear}</p>
+                  <div className="months-grid">
                     {[...Array(12)].map((_, monthIndex) => {
                       const monthSchedules = getMonthSchedules(
                         stakeholder.schedules || [],
                         monthIndex + 1
                       );
                       const schedule = monthSchedules[0];
+                      const monthName = new Date(0, monthIndex).toLocaleString(
+                        "id-ID",
+                        { month: "short" }
+                      );
 
                       return (
-                        <td
+                        <div
                           key={monthIndex}
-                          className="col-month"
+                          className={`month-cell ${
+                            schedule ? "has-schedule" : "empty"
+                          }`}
                           onClick={() => {
                             if (schedule) {
                               openEditScheduleModal(schedule);
@@ -863,44 +815,41 @@ const KegiatanRutinNew = () => {
                             }
                           }}
                         >
+                          <div className="month-name">{monthName}</div>
                           {schedule ? (
-                            <div className="schedule-cell">
+                            <div className="schedule-info">
                               <div className="schedule-date">
                                 {formatDate(schedule.pickup_date)}
                               </div>
-                              <div className="schedule-status">
-                                {getStatusBadge(schedule.status)}
-                              </div>
+                              {schedule.proof_file && (
+                                <button
+                                  type="button"
+                                  className="btn-proof"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    const url = `http://localhost:5000/uploads/${schedule.proof_file}`;
+                                    window.open(url, "_blank");
+                                  }}
+                                >
+                                  <i className="fas fa-image"></i> Lihat Bukti
+                                </button>
+                              )}
+                              {getStatusBadge(schedule.status)}
                             </div>
                           ) : (
-                            <div className="schedule-cell-empty">
+                            <div className="add-schedule">
                               <i className="fas fa-plus-circle"></i>
+                              <span>Tambah</span>
                             </div>
                           )}
-                        </td>
+                        </div>
                       );
                     })}
-                    <td className="col-actions">
-                      <button
-                        className="btn-icon btn-edit"
-                        onClick={() => openEditStakeholderModal(stakeholder)}
-                        title="Edit Stakeholder"
-                      >
-                        <i className="fas fa-edit"></i>
-                      </button>
-                      <button
-                        className="btn-icon btn-delete"
-                        onClick={() => handleDeleteStakeholder(stakeholder.id)}
-                        title="Hapus Stakeholder"
-                      >
-                        <i className="fas fa-trash"></i>
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
 
@@ -1021,21 +970,6 @@ const KegiatanRutinNew = () => {
                     }
                   ></textarea>
                 </div>
-                <div className="form-group">
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={stakeholderForm.is_active}
-                      onChange={(e) =>
-                        setStakeholderForm({
-                          ...stakeholderForm,
-                          is_active: e.target.checked,
-                        })
-                      }
-                    />{" "}
-                    Aktif
-                  </label>
-                </div>
                 <div className="modal-footer">
                   <button type="submit" className="btn btn-primary">
                     Simpan
@@ -1087,30 +1021,6 @@ const KegiatanRutinNew = () => {
                   />
                 </div>
                 <div className="form-group">
-                  <label>Jumlah *</label>
-                  <input
-                    type="number"
-                    value={scheduleForm.quantity}
-                    onChange={(e) =>
-                      setScheduleForm({
-                        ...scheduleForm,
-                        quantity: parseInt(e.target.value),
-                      })
-                    }
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label>PIC</label>
-                  <input
-                    type="text"
-                    value={scheduleForm.pic}
-                    onChange={(e) =>
-                      setScheduleForm({ ...scheduleForm, pic: e.target.value })
-                    }
-                  />
-                </div>
-                <div className="form-group">
                   <label>Status</label>
                   <select
                     value={scheduleForm.status}
@@ -1140,9 +1050,11 @@ const KegiatanRutinNew = () => {
                   ></textarea>
                 </div>
                 <div className="form-group">
-                  <label>Bukti Pengiriman</label>
+                  <label>Bukti Pengambilan</label>
                   <input
                     type="file"
+                    accept="image/*"
+                    capture="environment"
                     onChange={(e) =>
                       setScheduleForm({
                         ...scheduleForm,
@@ -1150,6 +1062,15 @@ const KegiatanRutinNew = () => {
                       })
                     }
                   />
+                  <small
+                    style={{
+                      color: "#666",
+                      marginTop: "5px",
+                      display: "block",
+                    }}
+                  >
+                    Ambil foto langsung dari kamera atau pilih dari galeri
+                  </small>
                 </div>
                 <div className="modal-footer">
                   <button type="submit" className="btn btn-primary">

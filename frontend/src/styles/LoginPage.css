@@ -38,8 +38,17 @@
   --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.2);
 
   /*  Gradients  */
-  --g-primary: linear-gradient(135deg, var(--c-primary) 0%, var(--c-primary-600) 100%);
-  --g-bg: linear-gradient(135deg, var(--c-primary) 0%, var(--c-primary-600) 50%, var(--c-primary-800) 100%);
+  --g-primary: linear-gradient(
+    135deg,
+    var(--c-primary) 0%,
+    var(--c-primary-600) 100%
+  );
+  --g-bg: linear-gradient(
+    135deg,
+    var(--c-primary) 0%,
+    var(--c-primary-600) 50%,
+    var(--c-primary-800) 100%
+  );
 
   /*  Spacing System  */
   --sp-xs: 0.25rem;
@@ -87,8 +96,8 @@ html {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -103,33 +112,65 @@ body {
 
 /* ==================== KEYFRAMES & ANIMATIONS ==================== */
 @keyframes float {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-30px) scale(1.1); }
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-30px) scale(1.1);
+  }
 }
 
 @keyframes fadeInScale {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-30px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes slideInRight {
-  from { opacity: 0; transform: translateX(30px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-8px); }
-  75% { transform: translateX(8px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-8px);
+  }
+  75% {
+    transform: translateX(8px);
+  }
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ==================== CONTAINER (MOBILE FIRST) ==================== */
@@ -153,7 +194,11 @@ body {
   position: absolute;
   width: 300px;
   height: 300px;
-  background: radial-gradient(circle, rgba(0, 180, 216, 0.1) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(0, 180, 216, 0.1) 0%,
+    transparent 70%
+  );
   top: -150px;
   right: -150px;
   border-radius: 50%;
@@ -166,7 +211,11 @@ body {
   position: absolute;
   width: 250px;
   height: 250px;
-  background: radial-gradient(circle, rgba(72, 202, 228, 0.08) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(72, 202, 228, 0.08) 0%,
+    transparent 70%
+  );
   bottom: -120px;
   left: -120px;
   border-radius: 50%;
@@ -199,8 +248,8 @@ body {
   padding: var(--sp-lg);
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
   background-color: white;
   animation: slideInLeft var(--trans-slow) ease-out;
   min-height: auto;
@@ -209,9 +258,9 @@ body {
 
 /* ==================== HEADER ==================== */
 .login-header {
-  text-align: center;
+  text-align: left;
   width: 100%;
-  max-width: 400px;
+  max-width: 480px;
   margin-bottom: var(--sp-lg);
 }
 
@@ -234,6 +283,22 @@ body {
   margin: 0;
   font-weight: 400;
   line-height: 1.6;
+}
+
+/* ==================== TOPBAR LOGOS (LEFT) ==================== */
+.login-topbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-md);
+  margin-bottom: var(--sp-md);
+}
+
+.login-logo {
+  height: 36px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.15));
 }
 
 /* ==================== BUTTONS - TOUCH FRIENDLY ==================== */
@@ -268,7 +333,12 @@ body {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(0, 180, 216, 0.08), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 180, 216, 0.08),
+    transparent
+  );
   transition: left var(--trans-slow);
 }
 
@@ -324,7 +394,13 @@ body {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--c-muted-border) 20%, var(--c-muted-border) 80%, transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--c-muted-border) 20%,
+    var(--c-muted-border) 80%,
+    transparent
+  );
 }
 
 .divider span {
@@ -377,7 +453,11 @@ body {
 .form-group input:focus {
   border-color: var(--c-primary);
   box-shadow: 0 0 0 4px var(--shadow-focus);
-  background: linear-gradient(135deg, rgba(0, 180, 216, 0.02) 0%, rgba(0, 119, 182, 0.02) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(0, 180, 216, 0.02) 0%,
+    rgba(0, 119, 182, 0.02) 100%
+  );
 }
 
 .form-group input::placeholder {
@@ -614,7 +694,11 @@ body {
   position: absolute;
   width: 350px;
   height: 350px;
-  background: radial-gradient(circle, rgba(72, 202, 228, 0.2) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(72, 202, 228, 0.2) 0%,
+    transparent 70%
+  );
   top: -100px;
   right: -100px;
   border-radius: 50%;
@@ -626,7 +710,11 @@ body {
   position: absolute;
   width: 300px;
   height: 300px;
-  background: radial-gradient(circle, rgba(144, 224, 239, 0.15) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(144, 224, 239, 0.15) 0%,
+    transparent 70%
+  );
   bottom: -80px;
   left: -80px;
   border-radius: 50%;
@@ -693,7 +781,11 @@ body {
 }
 
 .points-display {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.25) 0%,
+    rgba(255, 255, 255, 0.15) 100%
+  );
   padding: var(--sp-xl);
   border-radius: var(--radius-lg);
   text-align: center;
@@ -745,6 +837,45 @@ body {
   font-size: var(--fs-base);
   line-height: 1.7;
   font-weight: 400;
+}
+
+/* ==================== SIMPLIFIED INFO BANNER (RIGHT) ==================== */
+.banner-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--sp-lg);
+  padding: var(--sp-2xl) var(--sp-xl);
+}
+
+.banner-note {
+  color: rgba(255, 255, 255, 0.95);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
+  padding: 10px 16px;
+  backdrop-filter: blur(10px);
+}
+
+.banner-title {
+  color: white;
+  font-size: var(--fs-2xl);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+  text-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+}
+
+.banner-tagline {
+  color: var(--c-primary-200);
+  font-size: var(--fs-lg);
+  font-weight: 800;
+  letter-spacing: 4px;
 }
 
 /* ==================== MEDIA QUERIES - MOBILE FIRST ==================== */
@@ -821,6 +952,7 @@ body {
     width: 50%;
     height: 100%;
     padding: clamp(40px, 5vw, 60px) clamp(40px, 5vw, 50px);
+    overflow-y: auto;
   }
 
   .login-banner {
@@ -993,7 +1125,11 @@ body {
   }
 
   .form-group input:focus {
-    background: linear-gradient(135deg, rgba(0, 180, 216, 0.08) 0%, rgba(0, 119, 182, 0.08) 100%);
+    background: linear-gradient(
+      135deg,
+      rgba(0, 180, 216, 0.08) 0%,
+      rgba(0, 119, 182, 0.08) 100%
+    );
   }
 
   .form-group input:-webkit-autofill {
@@ -1012,7 +1148,9 @@ body {
 
 @media (update: slow) {
   @keyframes float {
-    to { transform: translateY(-15px) scale(1.05); }
+    to {
+      transform: translateY(-15px) scale(1.05);
+    }
   }
 
   .login-container::before,

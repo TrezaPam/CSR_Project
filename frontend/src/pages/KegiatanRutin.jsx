@@ -4,7 +4,9 @@
 // ===============================================
 
 import { useState, useEffect, useCallback } from "react";
-import "../styles/kegiatanRutin.css"; // Pastikan file CSS ini ada
+import "../styles/KegiatanRutinExcel.css"; // Pakai stylesheet Excel view agar konsisten
+import DanoneLogo from "../assets/DANONE_LOGO_VERTICAL.png";
+import AquaLogo from "../assets/Logo_Aqua_Vector_PNG__HD-removebg-preview.png";
 
 const KegiatanRutin = () => {
   // ===============================================
@@ -300,6 +302,10 @@ const KegiatanRutin = () => {
 
       {/* Page Header */}
       <div className="page-header">
+        <div className="header-logos">
+          <img src={DanoneLogo} alt="Danone" className="header-logo" />
+          <img src={AquaLogo} alt="Aqua" className="header-logo" />
+        </div>
         <div className="page-title">
           <h1>
             <i className="fas fa-calendar-check"></i> Kegiatan Rutin

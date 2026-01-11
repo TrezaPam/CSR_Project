@@ -180,10 +180,7 @@ exports.getRoutinesByStakeholder = async (req, res) => {
           required: false,
         },
       ],
-      order: [
-        ["institution_name", "ASC"],
-        [{ model: RoutineSchedule, as: "schedules" }, "pickup_date", "ASC"],
-      ],
+      order: [["institution_name", "ASC"]],
     });
 
     res.status(200).json(stakeholders);
@@ -200,9 +197,15 @@ exports.createRoutine = async (req, res) => {
   try {
     const data = req.body;
 
+    // Set quantity otomatis dari default stakeholder jika tidak dikirim
+    if (!data.quantity) {
+      const stakeholder = await MasterStakeholder.findByPk(data.stakeholder_id);
+      data.quantity = stakeholder ? stakeholder.default_quantity : 0;
+    }
+
     // Jika ada file bukti diupload
     if (req.file) {
-      data.proof_file = req.file.filename;
+      data.proof_file = `proofs/${req.file.filename}`;
     }
 
     const newRoutine = await RoutineSchedule.create(data);
@@ -299,8 +302,19 @@ exports.updateRoutine = async (req, res) => {
     }
 
     const updateData = req.body;
+    // Jika quantity tidak dikirim, gunakan existing atau default stakeholder
+    if (!updateData.quantity) {
+      if (routine.quantity) {
+        updateData.quantity = routine.quantity;
+      } else {
+        const stakeholder = await MasterStakeholder.findByPk(
+          routine.stakeholder_id
+        );
+        updateData.quantity = stakeholder ? stakeholder.default_quantity : 0;
+      }
+    }
     if (req.file) {
-      updateData.proof_file = req.file.filename;
+      updateData.proof_file = `proofs/${req.file.filename}`;
     }
 
     await routine.update(updateData);

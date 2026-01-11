@@ -3,11 +3,24 @@ const router = express.Router();
 const routineController = require("../controllers/routine.controller");
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs");
 
-// Konfigurasi upload file (bukti pengiriman)
+// Konfigurasi upload file (bukti pengiriman) ke folder khusus
+const proofDir = path.join(
+  __dirname,
+  "..",
+  "..",
+  "public",
+  "uploads",
+  "proofs"
+);
+if (!fs.existsSync(proofDir)) {
+  fs.mkdirSync(proofDir, { recursive: true });
+}
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "public/uploads/");
+    cb(null, proofDir);
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
@@ -46,7 +59,3 @@ router.put(
 router.delete("/schedules/:id", routineController.deleteRoutine);
 
 module.exports = router;
-
-const routineRoutes = require("./src/routes/routine.routes");
-// ...
-app.use("/api/routines", routineRoutes);

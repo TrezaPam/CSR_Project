@@ -9,6 +9,8 @@ import {
   Filter,
 } from "lucide-react";
 import "../styles/ReportPage.css";
+import DanoneLogo from "../assets/DANONE_LOGO_VERTICAL.png";
+import AquaLogo from "../assets/Logo_Aqua_Vector_PNG__HD-removebg-preview.png";
 
 function ReportPage() {
   const [proposals, setProposals] = useState([]);
@@ -154,6 +156,10 @@ function ReportPage() {
     <div className="report-container">
       {/* Header */}
       <div className="report-header">
+        <div className="header-logos">
+          <img src={DanoneLogo} alt="Danone" className="header-logo" />
+          <img src={AquaLogo} alt="Aqua" className="header-logo" />
+        </div>
         <div className="report-title-section">
           <h1>
             <FileText size={32} />

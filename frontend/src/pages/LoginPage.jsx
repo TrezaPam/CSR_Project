@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/LoginPage.css"; // Kita akan buat style terpisah
+import DanoneLogo from "../assets/DANONE_LOGO_VERTICAL.png";
+import AquaLogo from "../assets/Logo_Aqua_Vector_PNG__HD-removebg-preview.png";
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -79,6 +81,10 @@ function LoginPage() {
       <div className="login-wrapper">
         {/* Left Panel - Login Form */}
         <div className="login-form-container">
+          <div className="login-topbar">
+            <img src={DanoneLogo} alt="Danone" className="login-logo" />
+            <img src={AquaLogo} alt="Aqua" className="login-logo" />
+          </div>
           <div className="login-header">
             <h1>Login</h1>
             <p className="subtitle">
@@ -182,38 +188,15 @@ function LoginPage() {
           </footer>
         </div>
 
-        {/* Right Panel - Rewards/Banner */}
+        {/* Right Panel - Simplified Info Banner */}
         <div className="login-banner">
           <div className="rewards-card">
-            <div className="rewards-header">
-              <h3>Rewards</h3>
-            </div>
-            <div className="rewards-stats">
-              <div className="stat-item">
-                <div className="stat-label">Total Balance</div>
-                <div className="stat-value">$ 162,751</div>
+            <div className="banner-content">
+              <div className="banner-note">
+                Masukkan username dengan ID Share Danone
               </div>
-              <div className="stat-item">
-                <div className="stat-label">Monthly Growth</div>
-                <div className="stat-value">$ 23,827</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-label">Aggert</div>
-                <div className="stat-value">APP NAME</div>
-              </div>
-            </div>
-
-            <div className="points-display">
-              <div className="points-label">Points</div>
-              <div className="points-value">172,832</div>
-            </div>
-
-            <div className="banner-footer">
-              <h2>Turn your ideas into reality.</h2>
-              <p>
-                Consistent quality and experience across all platforms and
-                devices.
-              </p>
+              <h2 className="banner-title">Dashboard Monitoring CSR</h2>
+              <div className="banner-tagline">SQCDME</div>
             </div>
           </div>
         </div>
